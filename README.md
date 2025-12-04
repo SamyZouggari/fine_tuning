@@ -69,24 +69,31 @@ What LLM can we choose ? The FineTome Instruction Dataset gives a list of pre-tr
 | Llama-3.2-3B-Instruct-bnb-4bit |
 | Llama-3.3-70B-Instruct-bnb-4bit |
 
-We have many LLMs at disposition. There are different size (from 1B to 405B parameters). Also, we have Instruct models that are adapted for chatbots.
+We have many LLMs at disposition. There are different size (from 1B to 405B parameters). Also, we have Instruct models that are adapted for single instructions.
 
 # Inference
 
-The inference pipeline is built on Hugging Face Spaces. It can be a chatbot, a text-to-image or anything else. We chose a Chatbot (Why ?).
+The inference pipeline is built on Hugging Face Spaces. It can be a chatbot, a text-to-image or anything else. We chose a Chatbot because of its simplicity and its fast inference.
 
-Inference is done on a CPU, that means that performance will be limited
+Inference is done on a CPU, that means that the performance will be limited.
 
 # Checkpointing the weight periodically
 
-# Saving the LLM
-
-The LLM is saved on HuggingFace, in the samzito12 profile
 
 # App/service
 
-We should use an app/service that uses the fine tuned LLM to make value-added decisions.
+Our service provides a specialized service for coding that has been trained on a code-focused dataset (Python, Java, SQL, etc.). It is also trained to give solutions to code-specific problems.
 
-We should come to ideas of how we can allow people to use the fine Tuned LLM.
+This service is available as a chatbot in the following space [samzito12/iris](https://huggingface.co/spaces/samzito12/) in hugging face. You have the liberty to choose the temperature you want from 0 to 1.5 and the max number of tokens the model can output from 128 to 512. Note that more tokens give a better response but it takes more time.
 
-We should also try different open-source LLM to find the one that works best with our UI
+# Training 
+
+The service runs with an custom LLM. The original one is a Llama-3.2-3B-Instruct. After the pre-training, a fine-tuning has been done with the [mlabonne/opc-sft-stage2-chat](https://huggingface.co/datasets/mlabonne/opc-sft-stage2-chat/) dataset with the following hyperparameters : (rank = 16, alpha = 16, dropout = 0)
+
+# Evaluation of the model
+
+To evaluate the model, we use the human-eval benchmark released by openAI to evaluate LLMs on 164 code tasks.
+
+We don't have the data for the performance of the pretrained model on this benchmark (one source says that Llama-3-Instruct score 81.7 for 70B parameters and 62.2 for 8B parameters, our pretrained model has 3B parameters).
+
+However, we have fine-tuned another model, with the same hyperparameters, but with a dataset that is not specialized in coding : [mlabonne/FineTome100k]() 
